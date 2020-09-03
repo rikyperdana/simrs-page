@@ -1,10 +1,18 @@
 _.assign(comp, {
   navbar: () => m('nav.navbar.is-primary.is-fixed-top',
-    m('.navbar-brand', m('a.navbar-item', "SIMRS.dev")),
+    m('.navbar-brand', m('a.navbar-item', {
+      'data-tooltip': 'ke Github',
+      class: 'has-tooltip-bottom',
+      href: 'https://github.com/rikyperdana/simrs',
+      target: '_blank'
+    }, "SIMRS.dev")),
     m('.navbar-menu',
       m('.navbar-start', _.map(topMenus, (val, key) =>
         m('a.navbar-item',
-          {class: val.children && 'has-dropdown is-hoverable'},
+          {
+            class: val.children && 'has-dropdown is-hoverable',
+            onclick: () => [state.moduleInfo = key, m.redraw()]
+          },
           val.children ? [
             m('a.navbar-link', _.startCase(val.full)),
             m('.navbar-dropdown', _.map(val.children, (i, j) =>
@@ -35,6 +43,11 @@ _.assign(comp, {
   ),
 
   dashboard: () => m('.content',
+    state.moduleInfo && m('article.message',
+      {onclick: () => [state.moduleInfo = null, m.redraw()]},
+      m('.message-header', menus[state.moduleInfo].full),
+      m('.message-body', menus[state.moduleInfo].desc)
+    ),
     m('h1', 'Dashboard'),
     m('.buttons',
       m('.button.is-info', {
@@ -45,6 +58,11 @@ _.assign(comp, {
     _.chunk(_.map(menus, (v, k) => [v, k]), 3).map(i =>
       m('.columns', i.map(j => m('.column',
         m('.box', m('article.media',
+          j[0].video && {
+            'data-tooltip': 'ke video Tutorial '+j[0].full,
+            class: 'has-tooltip-info',
+            href: j[0].video, target: '_blank'
+          },
           m('.media-left', m('span.icon.has-text-primary',
             m('i.fas.fa-2x.fa-'+j[0].icon))
           ),
