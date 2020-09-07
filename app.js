@@ -57,7 +57,7 @@ _.assign(comp, {
     ),
     _.chunk(_.map(menus, (v, k) => [v, k]), 3).map(i =>
       m('.columns', i.map(j => m('.column',
-        m('.box', m('article.media',
+        m('.box', m('a.article.media',
           j[0].video && {
             'data-tooltip': 'ke video Tutorial '+j[0].full,
             class: 'has-tooltip-info',
