@@ -1,17 +1,33 @@
 _.assign(comp, {
   navbar: () => m('nav.navbar.is-primary.is-fixed-top',
-    m('.navbar-brand', m('a.navbar-item', {
-      'data-tooltip': 'ke Github',
-      class: 'has-tooltip-bottom',
-      href: 'https://github.com/rikyperdana/simrs',
-      target: '_blank'
-    }, "SIMRS.dev")),
+    m('.navbar-brand',
+      m('a.navbar-item', {
+        'data-tooltip': 'ke Github',
+        class: 'has-tooltip-bottom',
+        href: 'https://github.com/rikyperdana/simrs',
+        target: '_blank'
+      }, "SIMRS.dev"),
+      m('.navbar-burger',
+        {
+          role: 'button', class: state.burgerMenu ? 'is-active' : '',
+          onclick: () => state.burgerMenu = !state.burgerMenu
+        },
+        _.range(3).map(i => m('span', {'aria-hidden': true}))
+      )
+    ),
     m('.navbar-menu',
+      {class: state.burgerMenu && 'is-active'},
       m('.navbar-start', _.map(topMenus, (val, key) =>
         m('a.navbar-item',
           {
             class: val.children && 'has-dropdown is-hoverable',
-            onclick: () => [state.moduleInfo = key, m.redraw()]
+            onclick: () => [
+              _.assign(state, {
+                moduleInfo: key,
+                burgerMenu: null
+              }),
+              m.redraw()
+            ]
           },
           val.children ? [
             m('a.navbar-link', _.startCase(val.full)),
@@ -98,8 +114,8 @@ _.assign(comp, {
 })
 
 m.mount(document.body, {view: () => m('.has-background-light',
-  comp.navbar(), m('.container',
+  comp.navbar(), m('section.section', m('.container',
     {style: 'min-height:100vh'}, m('br'),
     comp.dashboard()
-  )
+  ))
 )})
