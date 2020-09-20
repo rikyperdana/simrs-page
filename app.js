@@ -5,7 +5,9 @@ _.assign(comp, {
         'data-tooltip': 'ke Github',
         class: 'has-tooltip-bottom',
         href: 'https://github.com/rikyperdana/simrs',
-        target: '_blank'
+        ondblclick: () => gtag_report_conversion(
+          'https://github.com/rikyperdana/simrs'
+        ), target: '_blank'
       }, "SIMRS.dev"),
       m('.navbar-burger',
         {
